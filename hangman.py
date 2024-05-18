@@ -38,7 +38,7 @@ def hangman(word, lives=6):
             lives -= 1
 
     if lives == 0:
-        print(f"Przegrałeś! Słowo to: {word}")
+        print(f"Przegrałeś! :( Słowo to: {word}")
 
 if __name__ == "__main__":
     hangman("python")

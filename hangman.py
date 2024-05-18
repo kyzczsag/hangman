@@ -1,7 +1,13 @@
 import os
+import random
+
+def load_words(filename):
+    with open(filename, 'r') as file:
+        lines = file.readlines()
+    return [line.strip().split(';')[0] for line in lines]
 
 def display_current_state(word, guessed_letters):
-    return " ".join([letter if letter in guessed_letters else "_" for letter in word])
+    return " ".join([letter if letter.lower() in guessed_letters else "_" for letter in word])
 
 def get_guess(already_guessed):
     while True:
@@ -16,7 +22,21 @@ def get_guess(already_guessed):
         else:
             return guess
 
-def hangman(word, lives=6):
+def choose_level():
+    while True:
+        level = input("Wybierz poziom trudności (łatwy, średni, trudny): ").lower()
+        if level in ["łatwy", "średni", "trudny"]:
+            if level == "łatwy":
+                return 10
+            elif level == "średni":
+                return 6
+            elif level == "trudny":
+                return 4
+        else:
+            print("Nieprawidłowy poziom trudności. Spróbuj ponownie.")
+
+def hangman(words, lives):
+    word = random.choice(words)
     guessed_letters = set()
     wrong_guesses = set()
 
@@ -28,9 +48,9 @@ def hangman(word, lives=6):
 
         guess = get_guess(guessed_letters | wrong_guesses)
 
-        if guess in word:
+        if guess in word.lower():
             guessed_letters.add(guess)
-            if all(letter in guessed_letters for letter in word):
+            if all(letter.lower() in guessed_letters for letter in word):
                 print(f"Gratulacje! Odgadłeś słowo: {word}")
                 break
         else:
@@ -38,7 +58,9 @@ def hangman(word, lives=6):
             lives -= 1
 
     if lives == 0:
-        print(f"Przegrałeś! :( Słowo to: {word}")
+        print(f"Przegrałeś! Słowo to: {word}")
 
 if __name__ == "__main__":
-    hangman("python")
+    words = load_words("countries-and-capitals.txt")
+    lives = choose_level()
+    hangman(words, lives)

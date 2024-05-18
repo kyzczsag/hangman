@@ -2,7 +2,7 @@ import os
 import random
 
 # Grafiki ASCII dla wisielca
-hangman_stages = [
+hangman_stages_6 = [
     """
        ------
        |    |
@@ -68,6 +68,156 @@ hangman_stages = [
     """
 ]
 
+hangman_stages_10 = [
+    """
+       ------
+       |    |
+            |
+            |
+            |
+            |
+    -----------
+    """,
+    """
+       ------
+       |    |
+       O    |
+            |
+            |
+            |
+    -----------
+    """,
+    """
+       ------
+       |    |
+       O    |
+       |    |
+            |
+            |
+    -----------
+    """,
+    """
+       ------
+       |    |
+       O    |
+      /|    |
+            |
+            |
+    -----------
+    """,
+    """
+       ------
+       |    |
+       O    |
+      /|\\   |
+            |
+            |
+    -----------
+    """,
+    """
+       ------
+       |    |
+       O    |
+      /|\\   |
+      /     |
+            |
+    -----------
+    """,
+    """
+       ------
+       |    |
+       O    |
+      /|\\   |
+      / \\   |
+            |
+    -----------
+    """,
+    """
+       ------
+       |    |
+       O    |
+      /|\\   |
+      / \\   |
+     /      |
+    -----------
+    """,
+    """
+       ------
+       |    |
+       O    |
+      /|\\   |
+      / \\   |
+     / \\    |
+    -----------
+    """,
+    """
+       ------
+       |    |
+       O    |
+     //|\\   |
+     // \\   |
+     / \\    |
+    -----------
+    """,
+    """
+       ------
+       |    |
+       O    |
+     //|\\   |
+     // \\   |
+     / \\    |
+    -----------
+    """
+]
+
+hangman_stages_4 = [
+    """
+       ------
+       |    |
+            |
+            |
+            |
+            |
+    -----------
+    """,
+    """
+       ------
+       |    |
+       O    |
+            |
+            |
+            |
+    -----------
+    """,
+    """
+       ------
+       |    |
+       O    |
+       |    |
+            |
+            |
+    -----------
+    """,
+    """
+       ------
+       |    |
+       O    |
+      /|\\   |
+            |
+            |
+    -----------
+    """,
+    """
+       ------
+       |    |
+       O    |
+      /|\\   |
+      / \\   |
+            |
+    -----------
+    """
+]
+
 def load_words(filename):
     with open(filename, 'r') as file:
         lines = file.readlines()
@@ -94,22 +244,22 @@ def choose_level():
         level = input("Wybierz poziom trudności (łatwy, średni, trudny): ").lower()
         if level in ["łatwy", "średni", "trudny"]:
             if level == "łatwy":
-                return 10
+                return 10, hangman_stages_10
             elif level == "średni":
-                return 6
+                return 6, hangman_stages_6
             elif level == "trudny":
-                return 4
+                return 4, hangman_stages_4
         else:
             print("Nieprawidłowy poziom trudności. Spróbuj ponownie.")
 
-def hangman(words, lives):
+def hangman(words, lives, stages):
     word = random.choice(words)
     guessed_letters = set()
     wrong_guesses = set()
 
     while lives > 0:
         os.system('cls' if os.name == 'nt' else 'clear')
-        print(hangman_stages[6 - lives])  # Wyświetla odpowiednią grafikę ASCII
+        print(stages[len(stages) - lives - 1])  # Wyświetla odpowiednią grafikę ASCII
         print("Stan gry: ", display_current_state(word, guessed_letters))
         print("Błędne litery: ", " ".join(wrong_guesses))
         print(f"Pozostałe życia: {lives}")
@@ -127,10 +277,10 @@ def hangman(words, lives):
 
     if lives == 0:
         os.system('cls' if os.name == 'nt' else 'clear')
-        print(hangman_stages[6 - lives])  # Wyświetla końcową grafikę ASCII
+        print(stages[-1])  # Wyświetla końcową grafikę ASCII
         print(f"Przegrałeś! Słowo to: {word}")
 
 if __name__ == "__main__":
     words = load_words("countries-and-capitals.txt")
-    lives = choose_level()
-    hangman(words, lives)
+    lives, stages = choose_level()
+    hangman(words, lives, stages)

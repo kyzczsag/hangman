@@ -1,4 +1,4 @@
-import os
+import random
 
 def display_current_state(word, guessed_letters):
     return " ".join([letter if letter in guessed_letters else "_" for letter in word])
@@ -21,7 +21,6 @@ def hangman(word, lives=6):
     wrong_guesses = set()
 
     while lives > 0:
-        os.system('cls' if os.name == 'nt' else 'clear')
         print("Stan gry: ", display_current_state(word, guessed_letters))
         print("Błędne litery: ", " ".join(wrong_guesses))
         print(f"Pozostałe życia: {lives}")
@@ -40,5 +39,9 @@ def hangman(word, lives=6):
     if lives == 0:
         print(f"Przegrałeś! Słowo to: {word}")
 
-if __name__ == "__main__":
-    hangman("python")
+def main():
+    possible_words = ["Warsaw", "Paris", "Berlin", "Oslo", "London"]
+    chosen_word = random.choice(possible_words)
+    hangman(chosen_word)
+
+main()

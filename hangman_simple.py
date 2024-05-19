@@ -1,7 +1,7 @@
 import random
 
 def display_current_state(word, guessed_letters):
-    return " ".join([letter if letter in guessed_letters else "_" for letter in word])
+    return " ".join([letter if letter.lower() in guessed_letters else "_" for letter in word])
 
 def get_guess(already_guessed):
     while True:
@@ -27,9 +27,9 @@ def hangman(word, lives=6):
 
         guess = get_guess(guessed_letters | wrong_guesses)
 
-        if guess in word:
+        if guess in word.lower():
             guessed_letters.add(guess)
-            if all(letter in guessed_letters for letter in word):
+            if all(letter.lower() in guessed_letters for letter in word):
                 print(f"Gratulacje! Odgadłeś słowo: {word}")
                 break
         else:
